@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.IO;
 using System.Collections.Concurrent;
+using TMPro;
 
 public class TCPImageStreamClient : MonoBehaviour
 {
@@ -17,6 +18,9 @@ public class TCPImageStreamClient : MonoBehaviour
     public RectTransform rectTrans;
 
     public bool stretch = false;
+
+    [SerializeField]
+    TextMeshProUGUI statusText;
 
     Thread m_NetworkThread;
     bool m_NetworkRunning;
@@ -39,6 +43,8 @@ public class TCPImageStreamClient : MonoBehaviour
                 continue;
             }
         }
+
+        statusText.enabled = false;
     }
 
     void Update()
@@ -49,11 +55,17 @@ public class TCPImageStreamClient : MonoBehaviour
         if (!m_NetworkRunning)
         {
             Debug.Log("Retrying TCP server connection...");
+            statusText.enabled = true;
+            statusText.text = "Retrying TCP server connection at " + address + ":" + port + "...";
             if (m_NetworkThread != null)
                 m_NetworkThread.Join(100);
             m_NetworkThread = new Thread(NetworkThread);
             m_NetworkThread.Start();
             m_NetworkRunning = true;
+        }
+        else
+        {
+            statusText.enabled = false;
         }
 
         if (Input.GetKeyDown(KeyCode.F))
