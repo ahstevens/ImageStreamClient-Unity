@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.IO;
 using System.Collections.Concurrent;
 using TMPro;
+using UnityEngine.InputSystem;
 
 public class TCPImageStreamClient : MonoBehaviour
 {
@@ -49,7 +50,7 @@ public class TCPImageStreamClient : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.Escape))
+        if (Keyboard.current.qKey.wasPressedThisFrame || Keyboard.current.escapeKey.wasPressedThisFrame)
             Application.Quit();
 
         if (!m_NetworkRunning)
@@ -68,7 +69,7 @@ public class TCPImageStreamClient : MonoBehaviour
             statusText.enabled = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Keyboard.current.fKey.wasPressedThisFrame)
             stretch = !stretch;
 
         byte[] data;
